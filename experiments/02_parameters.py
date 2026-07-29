@@ -5,22 +5,18 @@ from langchain.chat_models import init_chat_model
 load_dotenv()
 
 def main():
-    print("Testing Model Parameters (Temperature, Max Tokens)\n")
+    print("Testing Model Parameters\n")
     
     # 1. Creative Model (High Temperature)
-    print("Initializing Creative Model (temp=0.9)...")
+    print("Initializing Creative Model...")
     creative_model = init_chat_model(
         "google_genai:gemini-3.6-flash",
-        temperature=0.9,
-        max_tokens=150
     )
 
     # 2. Strict/Predictable Model (Low Temperature)
     print("Initializing Strict Model (temp=0.1)...")
     strict_model = init_chat_model(
         "google_genai:gemini-3.6-flash",
-        temperature=0.1,
-        max_tokens=150
     )
 
     prompt = "Write a creative and unusual name for a pet cat. Just the name and a short reason."
