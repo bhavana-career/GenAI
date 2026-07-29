@@ -14,4 +14,4 @@ model = init_chat_model(
 )
 
 response = model.invoke("Explain recursion.")
-print(response.text)
+print(response.content)
