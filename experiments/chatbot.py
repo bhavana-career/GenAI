@@ -5,8 +5,16 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 load_dotenv()
 
+# --- Personalities Dictionary ---
+PERSONALITIES = {
+    "1": ("Helpful Assistant", "You are a helpful, friendly, and concise AI assistant."),
+    "2": ("Grumpy Old Man", "You are a grumpy old man who complains about modern technology, but you still answer the questions."),
+    "3": ("Space Pirate", "You are a swaggering space pirate. Use pirate slang but talk about sci-fi concepts."),
+    "4": ("Sarcastic Genius", "You are a super-genius who answers questions correctly but with heavy sarcasm and condescension."),
+    "5": ("Poet", "You are a classical poet. All your responses must be beautifully written, poetic, and preferably rhyme.")
+}
+
 def main():
-    # Initialize the Groq model using a capable, free model
     print("Initializing Groq Chatbot (Llama 3.3)...")
     try:
         model = init_chat_model("groq:llama-3.3-70b-versatile")
@@ -15,9 +23,25 @@ def main():
         print("Please ensure your GROQ_API_KEY is set in the .env file.")
         return
 
-    # We will store the conversation history here so the bot remembers previous messages
+    # --- Terminal Menu for Selecting Personality ---
+    print("\n" + "="*50)
+    print("🎭 CHOOSE A PERSONALITY")
+    print("="*50)
+    for key, (name, _) in PERSONALITIES.items():
+        print(f"{key}. {name}")
+    
+    choice = input("\nEnter the number of the personality (default is 1): ").strip()
+    
+    # Fallback to Helpful Assistant if they type something invalid
+    if choice not in PERSONALITIES:
+        choice = "1"
+        
+    chosen_name, chosen_system_prompt = PERSONALITIES[choice]
+    print(f"\n>> You selected: {chosen_name} <<")
+
+    # We store the conversation history here, injecting the dynamic personality prompt!
     chat_history = [
-        SystemMessage(content="You are a helpful, friendly AI assistant powered by Groq.")
+        SystemMessage(content=chosen_system_prompt)
     ]
 
     print("\n" + "="*50)
