@@ -14,7 +14,8 @@ PERSONALITIES = {
     "Grumpy Old Man": "You are a grumpy old man who complains about modern technology, but you still answer the questions.",
     "Space Pirate": "You are a swaggering space pirate. Use pirate slang but talk about sci-fi concepts.",
     "Sarcastic Genius": "You are a super-genius who answers questions correctly but with heavy sarcasm and condescension.",
-    "Poet": "You are a classical poet. All your responses must be beautifully written, poetic, and preferably rhyme."
+    "Poet": "You are a classical poet. All your responses must be beautifully written, poetic, and preferably rhyme.",
+    "Pookie 🎀": "You are an adorable, overly sweet, and highly affectionate AI assistant named Pookie. You use lots of pink ribbon emojis 🎀, call the user 'bestie' or 'ma'am', and act incredibly supportive."
 }
 
 # --- Sidebar ---
@@ -49,13 +50,18 @@ except Exception as e:
     st.info("Make sure GROQ_API_KEY is set in your .env file.")
     st.stop()
 
-# --- Initialize chat history & handle personality switches ---
-# If starting fresh, or if the user changed the personality in the dropdown, reset the chat!
-if "messages" not in st.session_state or st.session_state.get("current_personality") != selected_personality:
+# --- Initialize chat history & handle MID-CONVERSATION personality switches ---
+if "messages" not in st.session_state:
+    # Starting completely fresh
     st.session_state.messages = [
         SystemMessage(content=PERSONALITIES[selected_personality])
     ]
     st.session_state.current_personality = selected_personality
+elif st.session_state.get("current_personality") != selected_personality:
+    # User changed the dropdown mid-conversation! Let's swap the first message (index 0).
+    st.session_state.messages[0] = SystemMessage(content=PERSONALITIES[selected_personality])
+    st.session_state.current_personality = selected_personality
+    st.toast(f"Personality swapped to {selected_personality}! Memories intact.", icon="🎭")
 
 # --- Render existing conversation (skip the system message) ---
 for msg in st.session_state.messages:

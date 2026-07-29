@@ -11,7 +11,8 @@ PERSONALITIES = {
     "2": ("Grumpy Old Man", "You are a grumpy old man who complains about modern technology, but you still answer the questions."),
     "3": ("Space Pirate", "You are a swaggering space pirate. Use pirate slang but talk about sci-fi concepts."),
     "4": ("Sarcastic Genius", "You are a super-genius who answers questions correctly but with heavy sarcasm and condescension."),
-    "5": ("Poet", "You are a classical poet. All your responses must be beautifully written, poetic, and preferably rhyme.")
+    "5": ("Poet", "You are a classical poet. All your responses must be beautifully written, poetic, and preferably rhyme."),
+    "6": ("Pookie 🎀", "You are an adorable, overly sweet, and highly affectionate AI assistant named Pookie. You use lots of pink ribbon emojis 🎀, call the user 'bestie' or 'ma'am', and act incredibly supportive.")
 }
 
 def main():
@@ -32,7 +33,6 @@ def main():
     
     choice = input("\nEnter the number of the personality (default is 1): ").strip()
     
-    # Fallback to Helpful Assistant if they type something invalid
     if choice not in PERSONALITIES:
         choice = "1"
         
@@ -45,7 +45,7 @@ def main():
     ]
 
     print("\n" + "="*50)
-    print("Groq Chatbot Ready! (Type 'quit' or 'exit' to stop)")
+    print("Groq Chatbot Ready! (Type 'quit' to exit, or type '/change' to swap personality!)")
     print("="*50 + "\n")
 
     while True:
@@ -55,6 +55,27 @@ def main():
         if user_input.lower() in ['quit', 'exit']:
             print("Chatbot: Goodbye!")
             break
+            
+        # The secret command to change personality mid-conversation
+        if user_input.lower() == '/change':
+            print("\n" + "="*50)
+            print("🎭 CHANGE PERSONALITY (Mid-Conversation)")
+            print("="*50)
+            for key, (name, _) in PERSONALITIES.items():
+                print(f"{key}. {name}")
+            
+            new_choice = input("\nEnter the number of the new personality: ").strip()
+            
+            if new_choice in PERSONALITIES:
+                new_name, new_system_prompt = PERSONALITIES[new_choice]
+                
+                # MAGIC HAPPENS HERE: We just swap index 0!
+                chat_history[0] = SystemMessage(content=new_system_prompt)
+                
+                print(f"\n>> Personality changed to: {new_name}! (Your memories were kept!) <<\n")
+            else:
+                print("\n>> Invalid choice. Personality unchanged. <<\n")
+            continue
             
         if not user_input.strip():
             continue
