@@ -1,0 +1,9 @@
+langchain
+langchain-groq
+langchain-google-genai
+langchain-mistralai
+python-dotenv
+faiss-cpu
+pypdf
+pandas
+requests
