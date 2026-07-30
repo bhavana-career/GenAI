@@ -1,6 +1,6 @@
 import os
 from langchain_community.document_loaders import TextLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_text_splitters import TokenTextSplitter
 
 def main():
     # 1. Take the path and load the document
@@ -14,24 +14,23 @@ def main():
         print(f"Loaded {len(docs)} document(s).")
         print(f"Original document character count: {len(docs[0].page_content)}\n")
         
-        # 2. Initialize the Text Splitter
-        # RecursiveCharacterTextSplitter is highly recommended for generic text.
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=150,      # Maximum size of each chunk
-            chunk_overlap=30,    # Overlap between consecutive chunks to preserve context
-            length_function=len,
-            separators=["\n\n", "\n", " ", ""] # Order of preference for splitting
+        # 2. Initialize the Token Text Splitter
+        # This splits the text based on the number of tokens (using OpenAI's tiktoken encoding by default)
+        # LLMs have context windows based on tokens, not characters, so this is often more precise for fitting into context limits.
+        token_splitter = TokenTextSplitter(
+            chunk_size=50,       # Maximum number of tokens per chunk
+            chunk_overlap=10     # Number of tokens to overlap between chunks
         )
         
-        # 3. Split the document into smaller chunks
-        chunks = text_splitter.split_documents(docs)
+        # 3. Split the document into token-sized chunks
+        chunks = token_splitter.split_documents(docs)
         
-        print(f"--- Text Splitting Results ---")
+        print(f"--- Token Splitting Results ---")
         print(f"Total chunks created: {len(chunks)}\n")
         
         # Print out the first few chunks to inspect the result
         for i, chunk in enumerate(chunks[:3]):
-            print(f"Chunk {i+1} (Length: {len(chunk.page_content)}):")
+            print(f"Chunk {i+1} (Character length: {len(chunk.page_content)}):")
             print(chunk.page_content)
             print("-" * 40)
             

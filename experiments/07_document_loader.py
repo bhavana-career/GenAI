@@ -29,4 +29,4 @@ response = chain.invoke({"content": content})
 
 print("Generated Output:")
 print("-" * 50)
-print(getattr(response, 'text', getattr(response, 'content', str(response))))
+print(getattr(response, 'text', getattr(response, 'content', str(response))))
