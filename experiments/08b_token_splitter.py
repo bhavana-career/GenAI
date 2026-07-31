@@ -6,7 +6,7 @@ def main():
     # 1. Take the path and load the document
     file_path = input("Enter the file path (or press Enter for default sample.txt): ")
     if not file_path.strip():
-        file_path = r"C:\Users\bhava\OneDrive\Documents\Downloads\AI\sample.txt"
+        file_path = r"AI\sample.txt"
         
     try:
         loader = TextLoader(file_path)
